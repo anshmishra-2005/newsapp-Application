@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3A News</title>
+    <!--    <link rel="stylesheet" th:href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">-->
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+
+        }
+
+        :root {
+            --primary-text-color:#1B3b56;
+            --secondary-text-color:#577592;
+            --accent-color:#2294cd;
+            --accent-color-dark:#1d69a3;
+            --padding-inline-section:28px;
+
+        }
+
+        body {
+            font-family: "Poppins",sans-serif;
+            color: var(--primary-text-color);
+        }
+
+        p {
+            font-family: "Roboto",sans-serif;
+            color: var(--secondary-text-color);
+            line-height: 1.4rem;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        ul {
+            list-style: none;
+
+        }
+        .flex {
+            display: flex;
+            align-items: center;
+        }
+        .container {
+            max-width: 1100px;
+            margin-inline:auto ;
+            overflow: hidden;
+        }
+
+        nav {
+            background-color: #f3faff;
+            box-shadow: 0 0 4px #bbd0e2;
+            position: fixed;
+            top: 0;
+            z-index: 99;
+            left: 0;
+            right: 0;
+        }
+
+        .main-nav {
+            justify-content: space-between;
+            padding: 8px;
+            align-items: center;
+        }
+
+        .company-logo h1 {
+            padding-block: 12px;
+            width: 120px;
+            height: 70px;
+        }
+
+        .nav-links ul {
+            gap: 22px;
+        }
+
+        .hover-links {
+            cursor:pointer;
+
+        }
+
+        .hover-links:hover {
+            color:var(--secondary-text-color);
+        }
+
+        .hover-links:active {
+            color: red;
+        }
+
+        .nav-item.active {
+            color: var(--accent-color);
+        }
+
+        .search-bar {
+            height: 32px;
+            gap: 8px;
+        }
+        .news-input {
+            width: 200px;
+            height: 100%;
+            padding-inline: 12px;
+            border-radius: 4px;
+            border: 2px solid #bbd0e2;
+            font-family: "Roboto",sans-serif;
+        }
+
+        .search-button {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 8px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: "Roboto",sans-serif;
+        }
+
+        .search-button:hover {
+            background-color: var(--accent-color-dark);
+        }
+
+        main {
+            padding-block: 20px;
+            margin-top: 80px;
+        }
+
+        .cards-container {
+            justify-content: space-between;
+            flex-wrap: wrap;
+            row-gap: 20px;
+            align-items: start;
+        }
+
+        @media screen and  (max-width:1080px) {
+            .container {
+                max-width: 800px;
+            }
+        }
+
+        @media screen and  (max-width:730px) {
+            .container {
+                max-width: 450px;
+            }
+        }
+
+        @media screen and  (max-width:450px) {
+            .container {
+                max-width: 300px;
+            }
+        }
+
+        .cards {
+            width: 360px;
+            min-height: 400px;
+            box-shadow: 0px 0px 4px #d4ecff;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: #fff;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .cards:hover {
+            box-shadow: 1px 1px 8px #d4ecff;
+            background-color: #f9fdff;
+            transform: translateY(-2px);
+        }
+
+        .card-header img {
+            width:100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 12px;
+        }
+
+        .news-source {
+            margin-block: 12px;
+        }
+    </style>
+
+
+</head>
+<body>
+<nav>
+    <div class="main-nav container flex">
+        <a th:href="@{/home}" onclick="reload()" class="company-logo">
+            <h1>3ANews</h1>
+        </a>
+
+        <div class="nav-links">
+            <ul class="flex">
+                <li class="hover-links nav-items" id="ipl" onclick="onNavItemClick('ipl')">IPL</li>
+                <li class="hover-links nav-items" id="finance" onclick="onNavItemClick('finance')">Finance</li>
+                <li class="hover-links nav-items" id="politics" onclick="onNavItemClick('politics')">Politics</li>
+            </ul>
+            </ul>
+        </div>
+
+        <div class="search-bar">
+            <input type="text" class="news-input" placeholder="e.g, Science" id="serach-text">
+            <button class="search-button" id="search-button">Search</button>
+        </div>
+    </div>
+</nav>
+
+<main>
+    <div class="cards-container container flex" id="cards-container">
+
+    </div>
+
+</main>
+
+<template id="template-news-card">
+    <div class="cards">
+        <div class="card-header">
+            <img src="" alt="News Image" id="news-img">
+        </div>
+        <div class="card-content">
+            <h3 id="news-title">This is the title</h3>
+            <h6 class="news-source" id="news-source">End Gadget 26/08/2023</h6>
+            <p class="news-desc" id="news-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure id quaerat minima consequuntur aut est deserunt, eius nihil nisi fugiat.</p>
+        </div>
+    </div>
+</template>
+<script>
+    const API_KEY = "1f01865de166433893e5a6ac243fb493";
+    const url = "https://newsapi.org/v2/everything?q=";
+
+    window.addEventListener('load',() => fetchNews("India"));
+
+    function reload(){
+        window.location.reload();
+    }
+
+    async function fetchNews(query){
+        const res = await fetch(`${url}${query}&apiKey=${API_KEY}`);
+        const data = await res.json();
+
+
+        bindData(data.articles);
+    }
+
+    function bindData(articles){
+        const cardsContainer = document.getElementById('cards-container');
+        const newsCardTemplate = document.getElementById('template-news-card');
+
+        cardsContainer.innerHTML = "";
+        articles.forEach((articles) => {
+            if(!articles.urlToImage) return;
+            const cardClone = newsCardTemplate.content.cloneNode(true);
+            fillDataInCard(cardClone , articles);
+            cardsContainer.appendChild(cardClone);
+        });
+    }
+
+    function fillDataInCard(cardClone , articles){
+        const newsImg = cardClone.querySelector('#news-img');
+        const newsTitle = cardClone.querySelector('#news-title');
+        const newsSource = cardClone.querySelector('#news-source');
+        const newsDesc = cardClone.querySelector('#news-desc');
+
+        newsImg.src = articles.urlToImage;
+        newsTitle.innerHTML = articles.title;
+        newsDesc.innerHTML = articles.description;
+
+        const date = new Date(articles.publishhedAt).toLocaleString("en-US" , {
+            timeZone : "Asia/Jakarta"
+        });
+
+        newsSource.innerHTML = `${articles.source.name}. ${date}`;
+
+        cardClone.firstElementChild.addEventListener("click",() => {
+            window.open(articles.url,"_blank");
+        })
+    }
+
+    let curSelectedNav = null;
+    function onNavItemClick(id){
+        fetchNews(id);
+        const navItem = document.getElementById(id);
+        curSelectedNav?.classList.remove("active");
+        curSelectedNav = navItem;
+        curSelectedNav.classList.add("active");
+    }
+
+    const searchButton = document.getElementById('search-button');
+    const searchText = document.getElementById('serach-text');
+
+    searchButton.addEventListener("click",() => {
+        const query = searchText.value;
+        if(!query) return;
+        fetchNews(query);
+        curSelectedNav?.classList.remove('active');
+        curSelectedNav = null;
+    })
+</script>
+</body>
+</html>
